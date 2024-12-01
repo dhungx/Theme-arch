@@ -83,6 +83,8 @@ sudo chmod +x ./install-gentoo.sh
 ```bash
 git clone https://github.com/dhungx/Theme-arch
 cd Theme-arch
+sudo chmod +x ./install-arch.sh
+sudo ./install-arch.sh
 
 ```
 code Vi
