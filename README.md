@@ -83,8 +83,12 @@ sudo chmod +x ./install-gentoo.sh
 ```bash
 git clone https://github.com/dhungx/Theme-arch
 cd Theme-arch
-sudo chmod +x ./install-arch.sh
-./install-arch.sh
+
+```
+code Vi
+```bash
+sudo chmod +x ./install-arch-vi.sh
+sudo ./install-arch-vi.sh
 ```
 
 Cảm ơn **[Ksawlii](https://github.com/Ksawlii)** và **[Thomas Brugman](https://github.com/Githubguy132010)** đã tạo ra các script cài đặt này! <3
