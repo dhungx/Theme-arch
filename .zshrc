@@ -1,26 +1,25 @@
+# Cấu hình lịch sử
 HISTFILE=~/.histfile
-HISTSIZE=1000
-SAVEHIST=1000
-bindkey -e
+HISTSIZE=10000
+SAVEHIST=10000
+HISTCONTROL=ignoredups:erasedups
+setopt hist_ignore_all_dups
+setopt hist_save_no_dups
 
-zstyle :compinstall filename '~/.zshrc'
-clear && fastfetch
+# Cài đặt hoàn thành và hiển thị thông tin
 autoload -Uz compinit
-compinit
+compinit -C
+clear && fastfetch
 
-# Alias
-
-alias calculator='quich'
+# Aliases
 alias c='quich'
 alias calc='quich'
 alias ff='clear && fastfetch'
-alias uninstall='sudo pacman -R'
 alias update='sudo pacman -Syu'
-alias fucking='sudo'
+alias uninstall='sudo pacman -R'
 alias home='cd ~'
-# source ~/.oh-my-zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-# source ~/.oh-my-zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+alias update-all='sudo pacman -Syu && yay -Syu'
+alias cleanup='sudo pacman -Rns $(pacman -Qdtq)'
+
+# Starship Prompt
 eval "$(starship init zsh)"
-
-
-
