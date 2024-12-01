@@ -1,40 +1,66 @@
-/*
-          _                         _    
-__      _| | ___   __ _  ___  _   _| |_  
-\ \ /\ / / |/ _ \ / _` |/ _ \| | | | __| 
- \ V  V /| | (_) | (_| | (_) | |_| | |_  
-  \_/\_/ |_|\___/ \__, |\___/ \__,_|\__| 
-                  |___/                  
- 
------------------------------------------------------ 
-*/
+/* -----------------------------------------------------
+ * General Reset and Transitions
+ * ----------------------------------------------------- */
+* {
+    all: unset; /* Reset tất cả kiểu dáng thừa kế */
+    background-image: none; /* Loại bỏ hình nền */
+    transition: 400ms cubic-bezier(0.05, 0.7, 0.1, 1); /* Hiệu ứng chuyển tiếp mượt mà */
+}
 
 /* -----------------------------------------------------
- * General 
+ * Window Styling
  * ----------------------------------------------------- */
-
-* {
-	all: unset;
-	background-image: none;
-	transition: 400ms cubic-bezier(0.05, 0.7, 0.1, 1);
-}
-
 window {
-	background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.5); /* Nền cửa sổ bán trong suốt */
+    display: flex; /* Đảm bảo nội dung trong cửa sổ được canh giữa */
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Chiếm toàn bộ chiều cao màn hình */
 }
 
+/* -----------------------------------------------------
+ * Button Styling
+ * ----------------------------------------------------- */
 button {
-	font-family: 'Material Symbols Outlined';
-	font-size: 10rem;
-	background-color: rgba(11, 11, 11, 0.4);
-	color: #FFFFFF;
-	margin: 2rem;
-	border-radius: 2rem;
-	padding: 3rem;
+    font-family: 'Material Symbols Outlined', sans-serif; /* Phông chữ cho nút */
+    font-size: 6rem; /* Kích thước phông hợp lý (giảm từ 10rem) */
+    background-color: rgba(11, 11, 11, 0.4); /* Nền nút bán trong suốt */
+    color: #FFFFFF; /* Màu chữ trắng */
+    margin: 2rem; /* Khoảng cách bên ngoài nút */
+    border-radius: 2rem; /* Góc bo tròn cho nút */
+    padding: 2rem 4rem; /* Padding trong nút */
+    display: flex; /* Đảm bảo nội dung trong nút được căn giữa */
+    justify-content: center;
+    align-items: center;
+    border: none; /* Loại bỏ viền */
+    cursor: pointer; /* Con trỏ chuột khi di chuột qua */
 }
 
-button:active,
-button:hover {
-	background-color: rgba(51, 51, 51, 0.5);
-	border-radius: 4rem;
+/* -----------------------------------------------------
+ * Button Hover and Active States
+ * ----------------------------------------------------- */
+button:hover, button:active {
+    background-color: rgba(51, 51, 51, 0.5); /* Màu nền thay đổi khi hover/active */
+    border-radius: 4rem; /* Góc bo tròn mạnh hơn khi hover/active */
+}
+
+/* -----------------------------------------------------
+ * Window Content (Centering Elements)
+ * ----------------------------------------------------- */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Canh giữa các phần tử theo chiều ngang */
+    justify-content: center; /* Canh giữa theo chiều dọc */
+    height: 100%; /* Chiếm toàn bộ chiều cao của cửa sổ */
+}
+
+/* -----------------------------------------------------
+ * Additional Styling for Small Screen / Responsiveness
+ * ----------------------------------------------------- */
+@media (max-width: 768px) {
+    button {
+        font-size: 5rem; /* Giảm kích thước phông cho màn hình nhỏ */
+        padding: 1rem 2rem; /* Giảm padding cho màn hình nhỏ */
+    }
 }
