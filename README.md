@@ -1,6 +1,4 @@
-# **Tệp Cấu Hình Pilk | Dhungx Remake**
-
-Đây là bộ cấu hình hiện tại của tôi. Một giao diện cực kỳ sạch sẽ cho **Hyprland**, và cũng là bộ "rice" đầu tiên của tôi 🤓.
+Đây là bộ cấu hình hiện tại của tôi. Một giao diện cực kỳ sạch sẽ cho **Hyprland**. 🤓.
 
 Hầu hết các tệp cấu hình gốc này được tạo ra bởi các **cộng đồng** và tôi đã chỉnh sửa lại. Công sức lớn nhất đến từ [Stephan Raabe](https://github.com/mylinuxforwork) (ML4W), người đã tạo ra bộ cấu hình gốc mà tôi chỉnh sửa.
 
@@ -89,11 +87,11 @@ sudo ./install-arch.sh
 ```
 code Vi
 ```bash
+git clone https://github.com/dhungx/Theme-arch
+cd Theme-arch
 sudo chmod +x ./install-arch-vi.sh
 sudo ./install-arch-vi.sh
 ```
-
-Cảm ơn **[Ksawlii](https://github.com/Ksawlii)** và **[Thomas Brugman](https://github.com/Githubguy132010)** đã tạo ra các script cài đặt này! <3
 
 > **Lưu ý**:  
 > Script cài đặt hiện tại chỉ hỗ trợ Gentoo và Arch, một số tính năng có thể cần cấu hình thủ công.
