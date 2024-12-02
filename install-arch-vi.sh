@@ -1,24 +1,18 @@
 #!/bin/bash
 
-# Thoát ngay lập tức nếu một lệnh thoát với trạng thái khác không phải 0
+# Dừng script ngay lập tức nếu một lệnh thoát với trạng thái không phải 0
 set -e
-
-# Kiểm tra quyền sudo
-if ! sudo -v &>/dev/null; then
-    echo "Bạn cần quyền sudo để chạy script này."
-    exit 1
-fi
 
 # Lấy thư mục hiện tại của script
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-# Hàm yêu cầu trả lời yes/no với prompt tùy chỉnh
+# Hàm hỏi người dùng có muốn làm gì đó hay không với câu hỏi có thể tùy chỉnh
 ask_yn() {
     while true; do
         read -p "$1 (y/n): " yn
         case $yn in
-            [Yy]* ) return 0;;  # Trả về 0 (thành công) nếu trả lời "yes"
-            [Nn]* ) return 1;;  # Trả về 1 (thất bại) nếu trả lời "no"
+            [Yy]* ) return 0;;  # Trả về 0 (thành công) nếu chọn yes
+            [Nn]* ) return 1;;  # Trả về 1 (thất bại) nếu chọn no
             * ) echo "Vui lòng trả lời y hoặc n.";;
         esac
     done
@@ -26,28 +20,45 @@ ask_yn() {
 
 # Kích hoạt multilib nếu chưa được kích hoạt
 if ! grep -q '^\[multilib\]' /etc/pacman.conf; then
-    echo "Kích hoạt kho lưu trữ multilib..."
-    echo -e "\n[multilib]\nInclude = /etc/pacman.d/mirrorlist" | sudo tee -a /etc/pacman.conf
+    echo "Đang kích hoạt kho lưu trữ multilib..."
+    echo -e "\n[multilib]\nInclude = /etc/pacman.d/mirrorlist" | sudo tee -a /etc/pacman.conf > /dev/null
     sudo pacman -Syu
+else
+    echo "Kho lưu trữ multilib đã được kích hoạt."
+    sleep 2
+    clear
 fi
 
-# Kiểm tra và cài đặt yay (AUR helper)
-if ! command -v yay &> /dev/null; then
-    echo "Cài đặt yay (AUR helper)..."
-    sudo pacman -Syu --needed base-devel git
-    git clone https://aur.archlinux.org/yay.git ~/yay
-    (cd ~/yay && makepkg -si)
-    rm -rf ~/yay
-else
-    echo "yay đã được cài đặt."
-fi
+# Hàm cài đặt yay hoặc paru
+install_aur_helper() {
+    local aur_helper=$1
+    local aur_url=$2
+    local aur_dir=$3
 
-# Cài đặt các gói phụ thuộc
-echo ""
-if ask_yn "Bạn có muốn cài đặt các phụ thuộc cần thiết (khuyến nghị)?"; then
-    yay -Syu --needed hyprland waybar waypaper swww rofi-wayland swaync python-pipx nemo kitty pavucontrol gtk2 gtk3 nwg-look fastfetch zsh nerd-fonts-complete networkmanager networkmanager-qt nm-connection-editor xcur2png gsettings-qt hyprshot wlogout ttf-fira-sans ttf-firecode-nerd otf-droid-nerd texlive-fontsextra
-else
-    echo "Bỏ qua cài đặt phụ thuộc..."
+    if ! pacman -Q "$aur_helper" &>/dev/null; then
+        echo "$aur_helper chưa được cài đặt, đang tiến hành cài đặt..."
+        if ask_yn "Bạn có muốn cài đặt $aur_helper (AUR helper)?"; then
+            echo "Đang cài đặt $aur_helper..."
+            sudo pacman -Syu --needed base-devel git
+            git clone "$aur_url" "$aur_dir"
+            (cd "$aur_dir" && makepkg -si)
+            rm -rf "$aur_dir"
+        else
+            echo "Bỏ qua cài đặt $aur_helper..."
+            sleep 2
+        fi
+    else
+        echo "$aur_helper đã được cài đặt, bỏ qua cài đặt..."
+        sleep 2
+    fi
+}
+
+# Cài đặt yay
+install_aur_helper "yay" "https://aur.archlinux.org/yay.git" "~/yay"
+
+# Cài đặt paru (nếu yay đã được cài đặt)
+if pacman -Q yay &>/dev/null; then
+    install_aur_helper "paru" "https://aur.archlinux.org/paru.git" "~/paru"
 fi
 
 # Cài đặt Oh My Zsh
@@ -60,55 +71,48 @@ if ask_yn "Bạn có muốn cài đặt Oh My Zsh?"; then
     fi
 else
     echo "Bỏ qua cài đặt Oh My Zsh..."
+    sleep 2
+    clear
 fi
 
-# Tạo sao lưu các tệp cấu hình nếu đã tồn tại
-echo "Đang sao lưu các cấu hình hiện tại..."
+# Sao chép các tệp cấu hình
+echo ""
+echo "Đang sao chép các tệp cấu hình..."
+sleep 1
+
+# Tạo thư mục sao lưu các cấu hình cũ
 BACKUP_DIR="$HOME/backup_$(date +%Y%m%d_%H%M%S)"
 mkdir -p "$BACKUP_DIR"
 
-# Hàm sao lưu và sao chép
 copy_with_backup() {
     local src=$1
     local dest=$2
     if [ -e "$dest" ]; then
-        echo "Đang sao lưu $(basename "$dest") hiện tại vào $BACKUP_DIR"
+        echo "Đang sao lưu $(basename "$dest") vào $BACKUP_DIR"
         mv "$dest" "$BACKUP_DIR"
     fi
     cp -rf "$src" "$dest"
 }
 
-# Sao lưu và sao chép cấu hình
+# Sao lưu và sao chép các tệp cấu hình
+echo "Đang sao lưu các cấu hình hiện tại vào $BACKUP_DIR"
 copy_with_backup "$SCRIPT_DIR/.config/" "$HOME/.config/"
 copy_with_backup "$SCRIPT_DIR/.zshrc" "$HOME/.zshrc"
 copy_with_backup "$SCRIPT_DIR/wallpaper" "$HOME/wallpaper"
 copy_with_backup "$SCRIPT_DIR/.themes/" "$HOME/.themes/"
 
-# Cài đặt Nerd Fonts nếu chưa cài
+# Cài đặt Nerd Fonts
+echo ""
 if ask_yn "Bạn có muốn cài đặt Nerd Fonts (Khuyến nghị)?"; then
-    if [ ! -d "$HOME/nerd-fonts" ]; then
-        echo "Đang sao chép Nerd Fonts..."
-        git clone --depth=1 https://github.com/ryanoasis/nerd-fonts.git ~/nerd-fonts
-        ~/nerd-fonts/install.sh
-        rm -rf ~/nerd-fonts
-    else
-        echo "Nerd Fonts đã được cài đặt."
-    fi
+    git clone --depth=1 https://github.com/ryanoasis/nerd-fonts.git ~/nerd-fonts
+    ~/nerd-fonts/install.sh
+    rm -rf ~/nerd-fonts
 else
     echo "Bỏ qua cài đặt Nerd Fonts..."
+    sleep 2
+    clear
 fi
 
-# Cài đặt font cho Zsh nếu chưa có
-if [ ! -d "$HOME/.fonts" ]; then
-    echo "Đang cài đặt font..."
-    mkdir -p "$HOME/.fonts"
-    cp -r "$SCRIPT_DIR/fonts/" "$HOME/.fonts/"
-    fc-cache -fv
-else
-    echo "Font đã được cài đặt."
-fi
-
-# Thông báo chuẩn bị hoàn tất
 echo ""
 echo "Sẵn sàng trong 3..."
 sleep 1
