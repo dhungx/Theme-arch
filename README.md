@@ -1,4 +1,4 @@
-Đây là bộ cấu hình hiện tại của tôi. Một giao diện cực kỳ sạch sẽ cho **Hyprland**. 🤓.
+Đây là bộ cấu hình hiện tại của tôi. Một giao diện cực kỳ sạch sẽ cho **Hyprland**.
 
 Hầu hết các tệp cấu hình gốc này được tạo ra bởi các **cộng đồng** và tôi đã chỉnh sửa lại. Công sức lớn nhất đến từ [Stephan Raabe](https://github.com/mylinuxforwork) (ML4W), người đã tạo ra bộ cấu hình gốc mà tôi chỉnh sửa.
 
@@ -22,7 +22,7 @@ Cảm ơn **[Ksawlii](https://github.com/Ksawlii)** và **[Thomas Brugman](https
 **Với Viền**  
 ![alt text](https://github.com/dhungx/Theme-arch/blob/master/screenshots/Screenshot1.png)
 
-**Hoạt Hình**  
+**Animation**  
 ![alt text](https://github.com/dhungx/Theme-arch/blob/master/screenshots/sc2.gif)
 
 ![alt text](https://github.com/dhungx/Theme-arch/blob/master/screenshots/sc1.gif)
